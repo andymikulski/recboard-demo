@@ -1,0 +1,20 @@
+.event-board .event-search {
+  width: 300px;
+  max-width: 100%;
+  margin-bottom: 1em;
+  display: block;
+  margin-left: auto;
+}
+
+.current-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.event-card {
+  margin-bottom: 2em;
+  max-width: 100%;
+  width: 350px;
+}
