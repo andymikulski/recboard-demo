@@ -1,26 +1,20 @@
 import fetch from 'isomorphic-fetch';
 import React, { Component } from 'react';
-import { DatePicker, Input,  TimePicker, Modal, Button, Form, Switch } from 'antd';
+import { Row, Col, DatePicker, Input,  TimePicker, Modal, Button, Form, Switch } from 'antd';
 import { browserHistory } from 'react-router';
 import PosterCreator from '../PosterCreator';
 import UserPicker from './UserPicker';
+import autobind from 'autobind-decorator';
 import './styles.css';
-
 const InputGroup = Input.Group;
 const { TextArea } = Input;
 const FormItem = Form.Item;
 
-
+@autobind
 class CreateEvent extends Component {
   state = {
     creatorVisible: false,
   };
-
-  constructor(props){
-    super(props);
-    this.togglePosterCreator = this.togglePosterCreator.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
 
   togglePosterCreator(evt) {
     // If it's a keyboard event, they're probably hitting escape, so we can
@@ -104,19 +98,34 @@ class CreateEvent extends Component {
           {...formItemLayout}
           label="Event Time"
         >
-          <InputGroup compact>
-            {getFieldDecorator('eventDate', {
-              rules: [
-                { required: true, message: 'Please select a date for the event.', type: 'object' },
-              ],
-            })(<DatePicker size="small" style={{ width: "40%" }}/>)}
+          <span className="event-time">
+            <InputGroup compact>
+              {getFieldDecorator('eventStartDate', {
+                rules: [
+                  { required: true, message: 'Please select a start date for the event.', type: 'object' },
+                ],
+              })(<DatePicker placeholder="Start Date" size="large" style={{ width: '40%' }}/>)}
 
-            {getFieldDecorator('eventTime', {
-              rules: [
-                { required: true, message: 'Please select a time for the event.', type: 'object' },
-              ],
-            })(<TimePicker size="large" use12Hours format="h:mm a" />)}
-          </InputGroup>
+              {getFieldDecorator('eventStartTime', {
+                rules: [
+                  { required: true, message: 'Please select a start time for the event.', type: 'object' },
+                ],
+              })(<TimePicker placeholder="Start Time" size="large" use12Hours format="h:mm a" />)}
+            </InputGroup>
+            <InputGroup compact>
+              {getFieldDecorator('eventEndDate', {
+                rules: [
+                  { required: true, message: 'Please select an end date for the event.', type: 'object' },
+                ],
+              })(<DatePicker placeholder="End Date" size="large" style={{ width: '40%' }}/>)}
+
+              {getFieldDecorator('eventEndTime', {
+                rules: [
+                  { required: true, message: 'Please select an end time for the event.', type: 'object' },
+                ],
+              })(<TimePicker placeholder="End Time" size="large" use12Hours format="h:mm a" />)}
+            </InputGroup>
+          </span>
         </FormItem>
 
         <FormItem

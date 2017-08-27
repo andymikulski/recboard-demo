@@ -33,29 +33,17 @@ const columns = [{
   ),
 }];
 
-const data = [{
-  key: '1',
-  name: 'John Brown',
-  age: 32,
-  address: 'New York No. 1 Lake Park',
-}, {
-  key: '2',
-  name: 'Jim Green',
-  age: 42,
-  address: 'London No. 1 Lake Park',
-}, {
-  key: '3',
-  name: 'Joe Black',
-  age: 32,
-  address: 'Sidney No. 1 Lake Park',
-}];
 
 export default class UpcomingEvents extends Component {
+  static defaultProps = {
+    list: [],
+  };
+  
   render() {
     return (
       <div className="event-board">
         <h1>Upcoming Events</h1>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={this.props.list} />
       </div>
     );
   }

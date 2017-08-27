@@ -4,6 +4,8 @@ import ColorPicker from './ColorPicker';
 import '../../lib/react-contextmenu.css';
 import './styles.css';
 import { fabric } from 'fabric';
+import autobind from 'autobind-decorator'
+
 
 const scaleObject = (obj, factor)=>{
   const scalable = [
@@ -23,6 +25,7 @@ const scaleObject = (obj, factor)=>{
   return obj;
 };
 
+@autobind
 export default class PosterCreator extends Component {
   static MAX_WIDTH = 1000;
 
@@ -32,15 +35,6 @@ export default class PosterCreator extends Component {
 
   constructor(props){
     super(props);
-    this.onCanvasMount = this.onCanvasMount.bind(this);
-    this.onWindowResize = this.onWindowResize.bind(this);
-    this.spawnPrimitive = this.spawnPrimitive.bind(this);
-    this.renderSink = this.renderSink.bind(this);
-    this.handleColorChange = this.handleColorChange.bind(this);
-
-    this.sendAllWayBack = this.sendAllWayBack.bind(this);
-    this.bringAllWayFront = this.bringAllWayFront.bind(this);
-
     this.id = `${Date.now()}-${Math.round(Math.random() * 1000)}`;
   }
 

@@ -21,13 +21,17 @@ const data = [{
 const ViewMore = ({ url })=><Link to={`event/${url}`}><Button type="primary" size="small">Details</Button></Link>;
 
 export default class CurrentEvents extends Component {
+  static defaultProps = {
+    list: [],
+  };
+
   render() {
     return (
       <div className="current-event-board">
         <h1>Events Happening Now</h1>
         <div className="current-list">
           {
-            data.map((event)=>{
+            this.props.list.map((event)=>{
               return (
                 <Card key={event.id} title={event.name} extra={<ViewMore url={event.id} />} className="event-card">
                   <img src="http://i.imgur.com/Wy2qRbp.jpg" />

@@ -1,8 +1,9 @@
-
+import autobind from 'autobind-decorator';
 import React from 'react'
 import { Select, Spin } from 'antd';
 const Option = Select.Option;
 
+@autobind
 export default class UserRemoteSelect extends React.Component {
   state = {
     data: [],
@@ -12,11 +13,9 @@ export default class UserRemoteSelect extends React.Component {
 
   constructor(props) {
     super(props);
-    this.lastFetchId = 0;
-    this.handleChange = this.handleChange.bind(this);
+    this.lastFetchId = 0
 
     // Debounce the fetchUser call by 250ms to prevent hitting the api a million times.
-    this._fetchUser = this._fetchUser.bind(this);
     this.fetchUser = (...args)=>{
       if (this.debounceTimer){
         clearTimeout(this.debounceTimer);
@@ -43,7 +42,6 @@ export default class UserRemoteSelect extends React.Component {
   }
 
   _fetchUser (value) {
-    console.log('fetching user', value);
     if (!value){
       this.setState({ data: this.getGivenList() });
       return;

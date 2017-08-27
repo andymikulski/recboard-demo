@@ -119,7 +119,6 @@ module.exports = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -149,6 +148,7 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               plugins: [
+                'transform-decorators-legacy',
                  ['import', { libraryName: 'antd', style: true }]
               ],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
