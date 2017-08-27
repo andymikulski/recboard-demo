@@ -27,20 +27,20 @@ export default class PosterCreator extends Component {
   loadJSON(saved, inProgressSize) {
     if (typeof saved === 'string') { saved = JSON.parse(saved); }
     // Determine how big we are compared to full size.
-    let factor = Math.min(1000, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
+    let factor = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
     factor = factor / inProgressSize;
 
     // Alter placements and scales accordingly.
-    for (var i in saved.objects) {
-      const obj = saved.objects[i];
+    saved.objects = saved.objects.map((obj)=>{
       obj.scaleX *= factor;
       obj.scaleY *= factor;
       obj.left *= factor;
       obj.top *= factor;
-    }
+      return obj;
+    });
 
     // Import the SVG elements.
-    this.artboard.loadFromJSON(saved);
+    this.artboard.loadFromJSON(saved, ()=>{ this.artboard.renderAll(); });
   }
 
   onCanvasMount(el){
@@ -87,23 +87,25 @@ export default class PosterCreator extends Component {
     this.artboard.on('object:added', this.saveCanvas.bind(this));
 
     const inProgress = localStorage.getItem('poster');
-    const inProgressSize = localStorage.getItem('poster-size');
-
     if (!inProgress){
-      var circle = new fabric.Rect({
-        height: 20, width: 20, fill: 'red', left: 100, top: 100
-      });
+      fabric.Image.fromURL('/clearcut.jpg', (oImg)=>{
+        console.log('ooook', oImg);
+        var circle = new fabric.Rect({
+          height: 20, width: 20, fill: 'red', left: 100, top: 100
+        });
 
-      var text = new fabric.IText('hello world', {
-        left: 100, top: 100,
-        fill: '#fff',
-        stroke: '#000',
-        strokeWidth: 2,
-        fontFamily: "Impact, sans-serif",
-      });
+        var text = new fabric.IText('hello world', {
+          left: 100, top: 100,
+          fill: '#fff',
+          stroke: '#000',
+          strokeWidth: 2,
+          fontFamily: "Impact, sans-serif",
+        });
 
-      this.artboard.add(circle, text);
+        this.artboard.add(oImg, circle, text).renderAll();
+      });
     } else {
+      const inProgressSize = localStorage.getItem('poster-size');
       this.loadJSON(JSON.parse(inProgress), inProgressSize);
     }
 
@@ -138,7 +140,6 @@ export default class PosterCreator extends Component {
       if(dontSave){
         return;
       }
-      this.saveCanvas();
     }
   }
 }
