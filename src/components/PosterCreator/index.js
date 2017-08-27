@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
-import { Link } from 'react-router'
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
 import ColorPicker from './ColorPicker';
 import '../../lib/react-contextmenu.css';

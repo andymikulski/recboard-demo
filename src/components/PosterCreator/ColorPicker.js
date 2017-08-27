@@ -21,7 +21,6 @@ export default class ColorPicker extends React.Component {
         return;
       }
 
-      const full = split[0];
       const r = split[1];
       const g = split[2];
       const b = split[3];

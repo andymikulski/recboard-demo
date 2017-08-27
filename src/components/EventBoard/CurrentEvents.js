@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Button } from 'antd';
+import { Card, Button } from 'antd';
 import { Link } from 'react-router'
 
 import './styles.css';

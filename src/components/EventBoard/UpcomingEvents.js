@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Table, Icon } from 'antd';
-import { Link } from 'react-router'
 
 import './styles.css';
 

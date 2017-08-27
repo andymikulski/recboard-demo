@@ -21,28 +21,20 @@ class MemoryDB {
     const found = [];
     const store = this.store[type] || [];
     store.forEach((item)=>{
-      console.log(`checking ${JSON.stringify(item)}`);
-
       let passes = true;
 
       for(const qual in qualifiers) {
         if(typeof qualifiers[qual] === 'function'){
-          console.log('\t1');
           passes = qualifiers[qual](item[qual]);
         } else if(typeof item[qual] === 'string') {
-          console.log('\t2');
           passes = item[qual].indexOf(qualifiers[qual]) > -1;
         } else {
-          console.log('\t3');
           passes = item[qual] == qualifiers[qual];
         }
       }
 
       if(passes){
-        console.log('passed');
         found.push(item);
-      } else {
-        console.log('failed');
       }
     });
 
