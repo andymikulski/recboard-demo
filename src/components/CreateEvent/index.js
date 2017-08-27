@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { Modal, Button, Layout, Form, Select, InputNumber, Switch, Radio,
+import { DatePicker, Input,  TimePicker, Modal, Button, Layout, Form, Select, InputNumber, Switch, Radio,
   Slider, Upload, Icon } from 'antd';
 import { Link } from 'react-router'
 import PosterCreator from '../PosterCreator';
+import UserPicker from './UserPicker';
 import './styles.css';
 
 const { Sider, Header, Content, Footer } = Layout;
+const InputGroup = Input.Group;
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioButton = Radio.Button;
@@ -35,6 +38,7 @@ export class CreateEvent extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
+      colon: false,
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
     };
@@ -51,23 +55,45 @@ export class CreateEvent extends Component {
         <Content>
           <h1>Create New Event</h1>
 
+- Event Name
+- Event Host(s)
+
+
           <Form onSubmit={this.handleSubmit}>
             <FormItem
               {...formItemLayout}
-              label="Select"
-              hasFeedback
+              label="&nbsp;"
             >
-              {getFieldDecorator('select', {
-                rules: [
-                  { required: true, message: 'Please select your country!' },
-                ],
-              })(
-                <Select placeholder="Please select a country">
-                  <Option value="china">China</Option>
-                  <Option value="use">U.S.A</Option>
-                </Select>
-              )}
+              <h1 className="ant-form-text">Create a new community event!</h1>
             </FormItem>
+
+            <FormItem
+              {...formItemLayout}
+              label="Event Name"
+            >
+              <Input size="large" />
+            </FormItem>
+
+            <FormItem
+              {...formItemLayout}
+              label="Event Description"
+            >
+              <TextArea
+                placeholder="Tell us what your event is about, what you will be doing, etc."
+                autosize={{ minRows: 2, maxRows: 6 }}
+              />
+            </FormItem>
+
+            <FormItem
+              {...formItemLayout}
+              label="Event Time"
+            >
+              <InputGroup compact>
+                <DatePicker size="small" style={{ width: "40%" }}/>
+                <TimePicker size="large" use12Hours format="h:mm a" />
+              </InputGroup>
+            </FormItem>
+
 
             <FormItem
               {...formItemLayout}
@@ -90,18 +116,16 @@ export class CreateEvent extends Component {
 
             <FormItem
               {...formItemLayout}
-              label="Select[multiple]"
+              label="Event Hosts"
             >
               {getFieldDecorator('select-multiple', {
                 rules: [
-                  { required: true, message: 'Please select your favourite colors!', type: 'array' },
+                  { required: true, message: 'Please select at least one event host.', type: 'array' },
                 ],
               })(
-                <Select mode="multiple" placeholder="Please select favourite colors">
-                  <Option value="red">Red</Option>
-                  <Option value="green">Green</Option>
-                  <Option value="blue">Blue</Option>
-                </Select>
+                <UserPicker
+                  list={[{ id: 123, username: 'DashDingo' }, { id: 456, username: 'DragonflyXO' }, { id: 678, username: 'OtherFriend' }]}
+                />
               )}
             </FormItem>
 

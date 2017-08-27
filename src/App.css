@@ -27,3 +27,28 @@
 #root .ant-layout {
   flex-grow: 1;
 }
+
+
+.ant-menu-item {
+  position: relative;
+  .ant-badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+  .ant-badge-dot {
+    right: 16px;
+    top: calc(50% - 4px);
+  }
+}
+
+.ant-badge-dot {
+  animation: 2s fadeInOut infinite;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}

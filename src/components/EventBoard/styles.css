@@ -1,16 +1,22 @@
-.event-board .event-search {
-  width: 300px;
-  max-width: 100%;
-  margin-bottom: 1em;
-  display: block;
-  margin-left: auto;
+.event-board {
+  h1 {
+    margin: 1em 0;
+  }
+
+  .event-search {
+    width: 300px;
+    max-width: 100%;
+    margin-bottom: 1em;
+    display: block;
+    margin-left: auto;
+  }
 }
 
 .current-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .current-list img {

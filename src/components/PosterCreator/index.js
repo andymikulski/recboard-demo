@@ -79,12 +79,12 @@ export default class PosterCreator extends Component {
     const menuContent = this.state.selection ? this.getMenuForSelection() : this.getMenuForCanvas();
     return (
       <div>
-        { this.renderSink() }
         <ContextMenuTrigger holdToDisplay={-1} id={ canvasId } disable={this.props.disableInteractions}>
           <div {...this.props} ref={this.onCanvasMount}>
             <canvas id={ this.id } />
           </div>
         </ContextMenuTrigger>
+        { this.renderSink() }
 
         { menuContent }
       </div>
