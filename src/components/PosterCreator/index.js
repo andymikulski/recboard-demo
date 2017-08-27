@@ -201,7 +201,6 @@ export default class PosterCreator extends Component {
     // Determine how big we are compared to full size.
     const currentWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
     const factor = currentWidth / parseFloat(lastSeenSize || '1');
-    console.log(currentWidth, lastSeenSize, factor);
 
     const scalable = [
       "left",
@@ -302,11 +301,9 @@ export default class PosterCreator extends Component {
     const saved = this.artboard.toObject();
     const savedString = JSON.stringify(saved);
 
-    console.log('saving..');
     localStorage.setItem('poster', savedString);
 
     const baseWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
-    console.log(baseWidth);
     localStorage.setItem('poster-size', baseWidth);
   }
 
