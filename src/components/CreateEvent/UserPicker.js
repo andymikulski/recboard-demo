@@ -15,13 +15,13 @@ export default class UserRemoteSelect extends React.Component {
     this.lastFetchId = 0;
     this.handleChange = this.handleChange.bind(this);
 
-    // Debounce the fetchUser call by 100ms to prevent hitting the api a million times.
+    // Debounce the fetchUser call by 250ms to prevent hitting the api a million times.
     this._fetchUser = this._fetchUser.bind(this);
     this.fetchUser = (...args)=>{
       if (this.debounceTimer){
         clearTimeout(this.debounceTimer);
       }
-      this.debounceTimer = setTimeout(()=>this._fetchUser(...args), 100);
+      this.debounceTimer = setTimeout(()=>this._fetchUser(...args), 250);
     };
   }
 
@@ -71,6 +71,7 @@ export default class UserRemoteSelect extends React.Component {
       data: this.getGivenList(),
       fetching: false,
     });
+    this.props.onChange(value);
   }
   render() {
     const { fetching, data, value } = this.state;

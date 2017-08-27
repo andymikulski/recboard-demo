@@ -11,3 +11,16 @@
 #event-poster canvas {
   border: 2px dashed rgba(0,0,0,0.2);
 }
+
+h1.ant-form-text {
+  margin: 1em 0 0;
+}
+
+hr {
+  opacity: 0.1;
+  width: calc(100% - 4em);
+  margin: 0 auto;
+  border: none;
+  height: 1px;
+  background: #111;
+}

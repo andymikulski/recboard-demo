@@ -27,4 +27,8 @@
   margin-bottom: 2em;
   max-width: 100%;
   width: 350px;
+  
+  flex: 1;
+  min-width: 33%;
+  max-width: 50%;
 }

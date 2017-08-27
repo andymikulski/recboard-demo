@@ -1,7 +1,9 @@
+import fetch from 'isomorphic-fetch';
 import React, { Component } from 'react';
 import { DatePicker, Input,  TimePicker, Modal, Button, Layout, Form, Select, InputNumber, Switch, Radio,
   Slider, Upload, Icon } from 'antd';
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router';
+import moment from 'moment';
 import PosterCreator from '../PosterCreator';
 import UserPicker from './UserPicker';
 import './styles.css';
@@ -14,7 +16,8 @@ const Option = Select.Option;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-export class CreateEvent extends Component {
+
+class CreateEvent extends Component {
   state = {
     creatorVisible: false,
   };
@@ -22,6 +25,7 @@ export class CreateEvent extends Component {
   constructor(props){
     super(props);
     this.togglePosterCreator = this.togglePosterCreator.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   togglePosterCreator(evt) {
@@ -32,6 +36,30 @@ export class CreateEvent extends Component {
     }
     this.setState({
       creatorVisible: !this.state.creatorVisible,
+    });
+  }
+
+  handleSubmit(evt) {
+    evt.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+
+        fetch('http://localhost:3333/event/new', {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          method: "POST",
+          body: JSON.stringify(values),
+        })
+        .then(res => res.json())
+        .then((results) => {
+          if (results) {
+            browserHistory.push(`/event/${results.id}`);
+          }
+        });
+      }
     });
   }
 
@@ -51,37 +79,39 @@ export class CreateEvent extends Component {
     };
 
     return (
-      <Layout>
-        <Content>
-          <h1>Create New Event</h1>
-
-- Event Name
-- Event Host(s)
-
-
-          <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit}>
+        <Layout>
+          <Content>
             <FormItem
               {...formItemLayout}
               label="&nbsp;"
             >
-              <h1 className="ant-form-text">Create a new community event!</h1>
+              <h1 className="ant-form-text">Create a New Event</h1>
             </FormItem>
 
             <FormItem
               {...formItemLayout}
               label="Event Name"
             >
-              <Input size="large" />
+              {getFieldDecorator('eventName', {
+                rules: [
+                  { required: true, message: 'Please enter an event name.' },
+                ],
+              })(<Input size="large" />)}
             </FormItem>
 
             <FormItem
               {...formItemLayout}
               label="Event Description"
             >
-              <TextArea
+            {getFieldDecorator('eventDescription', {
+              rules: [
+                { required: true, message: 'Please enter a description for the event.' },
+              ],
+            })(<TextArea
                 placeholder="Tell us what your event is about, what you will be doing, etc."
                 autosize={{ minRows: 2, maxRows: 6 }}
-              />
+              />)}
             </FormItem>
 
             <FormItem
@@ -89,38 +119,27 @@ export class CreateEvent extends Component {
               label="Event Time"
             >
               <InputGroup compact>
-                <DatePicker size="small" style={{ width: "40%" }}/>
-                <TimePicker size="large" use12Hours format="h:mm a" />
+                {getFieldDecorator('eventDate', {
+                  rules: [
+                    { required: true, message: 'Please select a date for the event.', type: 'object' },
+                  ],
+                })(<DatePicker size="small" style={{ width: "40%" }}/>)}
+
+                {getFieldDecorator('eventTime', {
+                  rules: [
+                    { required: true, message: 'Please select a time for the event.', type: 'object' },
+                  ],
+                })(<TimePicker size="large" use12Hours format="h:mm a" />)}
               </InputGroup>
-            </FormItem>
-
-
-            <FormItem
-              {...formItemLayout}
-              label="Event Poster"
-            >
-              {getFieldDecorator('event-poster')(
-                <PosterCreator disableInteractions key={this.state.creatorVisible} />
-              )}
-              <Button onClick={this.togglePosterCreator} type="primary" size="small">Edit Poster</Button>
-              <Modal
-                onOk={this.togglePosterCreator}
-                onClose={this.togglePosterCreator}
-                title="Event Poster Editor"
-                visible={this.state.creatorVisible}
-                okText="Save"
-                cancelText="Cancel"
-                width="70vw"
-              ><PosterCreator /></Modal>
             </FormItem>
 
             <FormItem
               {...formItemLayout}
               label="Event Hosts"
             >
-              {getFieldDecorator('select-multiple', {
+              {getFieldDecorator('eventHosts', {
                 rules: [
-                  { required: true, message: 'Please select at least one event host.', type: 'array' },
+                  { required: true, message: 'Please select at least one event host.' },
                 ],
               })(
                 <UserPicker
@@ -131,66 +150,40 @@ export class CreateEvent extends Component {
 
             <FormItem
               {...formItemLayout}
-              label="InputNumber"
+              label="Private Event"
             >
-              {getFieldDecorator('input-number', { initialValue: 3 })(
-                <InputNumber min={1} max={10} />
-              )}
-              <span className="ant-form-text"> machines</span>
-            </FormItem>
-
-            <FormItem
-              {...formItemLayout}
-              label="Switch"
-            >
-              {getFieldDecorator('switch', { valuePropName: 'checked' })(
+              {getFieldDecorator('eventPrivate', { valuePropName: 'checked' })(
                 <Switch />
               )}
             </FormItem>
 
             <FormItem
               {...formItemLayout}
-              label="Slider"
+              label="Event Poster"
             >
-              {getFieldDecorator('slider')(
-                <Slider marks={{ 0: 'A', 20: 'B', 40: 'C', 60: 'D', 80: 'E', 100: 'F' }} />
-              )}
+              {getFieldDecorator('eventPoster')(<PosterCreator disableInteractions key={this.state.creatorVisible} />)}
+              <Button onClick={this.togglePosterCreator} type="primary" size="small" style={{ display: 'block', marginLeft: 'auto' }}>Edit Poster</Button>
+              <Modal
+                onOk={this.togglePosterCreator}
+                onClose={this.togglePosterCreator}
+                title="Event Poster Editor"
+                visible={this.state.creatorVisible}
+                okText="Save"
+                cancelText="Cancel"
+                width="70vw"
+              >{getFieldDecorator('eventPoster')(<PosterCreator />)}</Modal>
             </FormItem>
 
-            <FormItem
-              {...formItemLayout}
-              label="Radio.Group"
-            >
-              {getFieldDecorator('radio-group')(
-                <RadioGroup>
-                  <Radio value="a">item 1</Radio>
-                  <Radio value="b">item 2</Radio>
-                  <Radio value="c">item 3</Radio>
-                </RadioGroup>
-              )}
-            </FormItem>
-
-            <FormItem
-              {...formItemLayout}
-              label="Radio.Button"
-            >
-              {getFieldDecorator('radio-button')(
-                <RadioGroup>
-                  <RadioButton value="a">item 1</RadioButton>
-                  <RadioButton value="b">item 2</RadioButton>
-                  <RadioButton value="c">item 3</RadioButton>
-                </RadioGroup>
-              )}
-            </FormItem>
+            <hr />
 
             <FormItem
               wrapperCol={{ span: 12, offset: 6 }}
             >
-              <Button type="primary" htmlType="submit">Submit</Button>
+              <Button type="primary" htmlType="submit" style={{ margin: '3em auto 1em', display: 'block' }}>Submit</Button>
             </FormItem>
-          </Form>
-        </Content>
-      </Layout>
+          </Content>
+        </Layout>
+      </Form>
     );
   }
 }

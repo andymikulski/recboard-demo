@@ -311,6 +311,7 @@ export default class PosterCreator extends Component {
       });
     });
 
+
     this.artboard.on('object:modified', this.saveCanvas.bind(this));
     this.artboard.on('object:added', this.saveCanvas.bind(this));
 
@@ -322,10 +323,6 @@ export default class PosterCreator extends Component {
         oImg.left = oImg.width / -2;
         oImg.top = oImg.height / -2;
 
-        var circle = new fabric.Rect({
-          height: 20, width: 20, fill: 'rgba(255,0,0,1)', left: 100, top: 100
-        });
-
         var text = new fabric.IText('hello world', {
           left: 100, top: 100,
           fill: 'rgba(255,255,255,1)',
@@ -335,24 +332,26 @@ export default class PosterCreator extends Component {
           fontWeight: 900,
         });
 
-        this.artboard.add(oImg, circle, text).renderAll();
+        this.artboard.add(oImg, text).renderAll();
+        this.saveCanvas(true);
       });
     } else {
       const lastSeenSize = localStorage.getItem('poster-size');
-      setTimeout(()=>this.loadJSON(JSON.parse(inProgress), lastSeenSize), 1);
+      setTimeout(()=>this.loadJSON(inProgress, lastSeenSize), 1);
     }
 
     this.onWindowResize(el, true);
   }
 
-  saveCanvas() {
+  saveCanvas(force) {
     const saved = this.artboard.toObject();
     const savedString = JSON.stringify(saved);
-
     localStorage.setItem('poster', savedString);
 
     const baseWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
     localStorage.setItem('poster-size', baseWidth);
+
+    this.props.onChange && this.props.onChange([savedString, baseWidth]);
   }
 
   onWindowResize() {
