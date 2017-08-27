@@ -30,7 +30,7 @@ export default class CurrentEvents extends Component {
             data.map((event)=>{
               return (
                 <Card key={event.id} title={event.name} extra={<ViewMore url={event.id} />} className="event-card">
-                  <p>Card content</p>
+                  <img src="http://i.imgur.com/Wy2qRbp.jpg" />
                   <p>Card content</p>
                   <p>Ends at { (new Date(event.endsAt)).toLocaleString() }</p>
                 </Card>

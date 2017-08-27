@@ -2,10 +2,28 @@ import React, { Component } from 'react';
 import { Button } from 'antd';
 import { Link } from 'react-router'
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
-
+import ColorPicker from './ColorPicker';
 import '../../lib/react-contextmenu.css';
 import './styles.css';
 import { fabric } from 'fabric';
+
+const scaleObject = (obj, factor)=>{
+  const scalable = [
+    "left",
+    "top",
+    "scaleX",
+    "scaleY",
+  ];
+
+  scalable.forEach((prop)=>{
+    obj[prop] *= factor;
+  });
+
+  if (obj.setCoords) {
+    obj.setCoords(true);
+  }
+  return obj;
+};
 
 export default class PosterCreator extends Component {
   static MAX_WIDTH = 1000;
@@ -19,8 +37,41 @@ export default class PosterCreator extends Component {
     this.onCanvasMount = this.onCanvasMount.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
     this.spawnPrimitive = this.spawnPrimitive.bind(this);
+    this.renderSink = this.renderSink.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
+
+    this.sendAllWayBack = this.sendAllWayBack.bind(this);
+    this.bringAllWayFront = this.bringAllWayFront.bind(this);
 
     this.id = `${Date.now()}-${Math.round(Math.random() * 1000)}`;
+  }
+
+  handleColorChange(obj, prop, color) {
+    obj.set(prop, color);
+    this.artboard.renderAll();
+  }
+
+  renderSink() {
+    if (!this.state.selection || this.props.disableInteractions) {
+      return <div style={{height: 28}} />;
+    }
+
+    const toolList = [
+      'fill',
+      'stroke',
+    ];
+
+    return (
+      <div key={this.state.selection}>
+        { toolList.map((prop)=>
+          <ColorPicker
+            color={this.state.selection[prop]}
+            onChange={(color)=>this.handleColorChange(this.state.selection, prop, color)}
+            label={prop}
+          />
+        )}
+      </div>
+    );
   }
 
   render() {
@@ -28,6 +79,7 @@ export default class PosterCreator extends Component {
     const menuContent = this.state.selection ? this.getMenuForSelection() : this.getMenuForCanvas();
     return (
       <div>
+        { this.renderSink() }
         <ContextMenuTrigger holdToDisplay={-1} id={ canvasId } disable={this.props.disableInteractions}>
           <div {...this.props} ref={this.onCanvasMount}>
             <canvas id={ this.id } />
@@ -47,6 +99,13 @@ export default class PosterCreator extends Component {
     this.artboard.bringForward(this.state.selection);
   }
 
+  sendAllWayBack() {
+    this.artboard.sendToBack(this.state.selection);
+  }
+  bringAllWayFront() {
+    this.artboard.bringToFront(this.state.selection);
+  }
+
   cloneActiveSelection() {
     this.state.selection.clone((clone)=>{
       clone.set('top', clone.top - 15);
@@ -58,7 +117,8 @@ export default class PosterCreator extends Component {
 
   removeSelection(force){
     if(force === true || window.confirm('Are you sure you want to remove this?')){
-      this.artboard.remove(this.state.selection);
+      this.artboard.remove(this.state.selection).renderAll();
+      this.saveCanvas();
     }
   }
 
@@ -69,11 +129,17 @@ export default class PosterCreator extends Component {
           Duplicate
         </MenuItem>
         <MenuItem divider />
+        <MenuItem onClick={this.bringAllWayFront.bind(this)}>
+          Bring To Front
+        </MenuItem>
         <MenuItem onClick={this.bringSelectionForward.bind(this)}>
           Bring Forward
         </MenuItem>
         <MenuItem onClick={this.sendSelectionBack.bind(this)}>
           Send Backward
+        </MenuItem>
+        <MenuItem onClick={this.sendAllWayBack.bind(this)}>
+          Send To Back
         </MenuItem>
         <MenuItem divider />
         <MenuItem onClick={this.removeSelection.bind(this)}>
@@ -104,24 +170,24 @@ export default class PosterCreator extends Component {
         newElement = new fabric.Rect({
           left: this.artboard.getWidth() / 2,
           top: this.artboard.getHeight() / 2,
-          fill: '#f00',
-          height: Math.ceil(Math.random() * 25) + 5,
-          width: Math.ceil(Math.random() * 25) + 5,
+          fill: 'rgba(255,0,0,1)',
+          height: 25,
+          width: 25,
         });
         break;
         case 'circle':
         newElement = new fabric.Circle({
           left: this.artboard.getWidth() / 2,
           top: this.artboard.getHeight() / 2,
-          fill: '#f00',
-          radius:  Math.ceil(Math.random() * 25) + 5,
+          fill: 'rgba(255,0,0,1)',
+          radius:  25,
         });
         break;
         case 'triangle':
         newElement = new fabric.Triangle({
           left: this.artboard.getWidth() / 2,
           top: this.artboard.getHeight() / 2,
-          fill: '#f00',
+          fill: 'rgba(255,0,0,1)',
           width: 25,
           height: 25,
         });
@@ -135,8 +201,8 @@ export default class PosterCreator extends Component {
         newElement = new fabric.IText('Double-Click to Edit Me!', {
           left: this.artboard.getWidth() / 2,
           top: this.artboard.getHeight() / 2,
-          fill: '#fff',
-          stroke: '#000',
+          fill: 'rgba(255,255,255,1)',
+          stroke: 'rgba(0,0,0,1)',
           strokeWidth: 2,
           fontFamily: "Impact, sans-serif",
           fontWeight: 900,
@@ -183,10 +249,6 @@ export default class PosterCreator extends Component {
               <MenuItem onClick={this.spawnImage('spillway')}>Spillway</MenuItem>
             </SubMenu>
         </SubMenu>
-        <MenuItem divider />
-        <MenuItem data={"some_data"} onClick={this.handleClicnk}>
-          Save
-        </MenuItem>
       </ContextMenu>
     );
   }
@@ -202,20 +264,8 @@ export default class PosterCreator extends Component {
     const currentWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
     const factor = currentWidth / parseFloat(lastSeenSize || '1');
 
-    const scalable = [
-      "left",
-      "top",
-      "scaleX",
-      "scaleY",
-    ];
-
-    // Alter placements and scales accordingly.
     saved.objects = saved.objects.map((obj)=>{
-      scalable.forEach((prop)=>{
-        obj[prop] *= factor;
-      })
-
-      return obj;
+      return scaleObject(obj, factor);
     });
 
     // Import the SVG elements.
@@ -233,7 +283,7 @@ export default class PosterCreator extends Component {
       if (!this.state.selection || !this.artboard){ return; }
 
       if (event.keyCode === 8 && !this.state.selection.isEditing){
-        this.removeSelection(true);
+        this.removeSelection();
       } else if (event.keyCode === 27){
         this.artboard.discardActiveObject().renderAll();
       }
@@ -243,17 +293,13 @@ export default class PosterCreator extends Component {
     const CanvasCreator = !this.props.disableInteractions ? fabric.Canvas : fabric.StaticCanvas;
 
     this.artboard = new CanvasCreator(this.id, {
-      backgroundColor: 'rgb(100,100,200)',
+      backgroundColor: 'rgba(100,100,200,1)',
       centeredRotation: true,
       preserveObjectStacking: true,
     });
 
 
     this.artboard.on('object:selected', ({ target })=>{
-      // Detect if a group has been selected.
-      // if (target._objects) {
-      //   return;
-      // }
       this.setState({
         selection: target,
       });
@@ -269,19 +315,21 @@ export default class PosterCreator extends Component {
     this.artboard.on('object:added', this.saveCanvas.bind(this));
 
     const inProgress = localStorage.getItem('poster');
+
+    // #TODO: scale the initial objects. Small screens overflow, currently.
     if (!inProgress){
       fabric.Image.fromURL('/clearcut.jpg', (oImg)=>{
         oImg.left = oImg.width / -2;
         oImg.top = oImg.height / -2;
 
         var circle = new fabric.Rect({
-          height: 20, width: 20, fill: 'red', left: 100, top: 100
+          height: 20, width: 20, fill: 'rgba(255,0,0,1)', left: 100, top: 100
         });
 
         var text = new fabric.IText('hello world', {
           left: 100, top: 100,
-          fill: '#fff',
-          stroke: '#000',
+          fill: 'rgba(255,255,255,1)',
+          stroke: 'rgba(0,0,0,1)',
           strokeWidth: 2,
           fontFamily: "Impact, sans-serif",
           fontWeight: 900,
@@ -335,12 +383,7 @@ function zoomIt(canvas, factor, bW, bH) {
 
   var objects = canvas.getObjects();
   for (var i in objects) {
-      objects[i].set('scaleX', objects[i].scaleX * factor);
-      objects[i].set('scaleY', objects[i].scaleY * factor);
-      objects[i].set('left', objects[i].left * factor);
-      objects[i].set('top', objects[i].top * factor);
-
-      objects[i].setCoords(true);
+    scaleObject(objects[i], factor)
   }
   canvas.renderAll();
   canvas.calcOffset();

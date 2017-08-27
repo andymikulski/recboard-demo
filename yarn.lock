@@ -5805,7 +5805,7 @@ react@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-reactcss@^1.2.0:
+reactcss@^1.2.0, reactcss@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/reactcss/-/reactcss-1.2.2.tgz#41b0ef43e01d54880357c34b11ac1531209350ef"
   dependencies:

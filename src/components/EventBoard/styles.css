@@ -13,6 +13,10 @@
   justify-content: space-around;
 }
 
+.current-list img {
+  max-width: 100%;
+}
+
 .event-card {
   margin-bottom: 2em;
   max-width: 100%;
