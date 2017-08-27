@@ -53,7 +53,7 @@ export default class PosterCreator extends Component {
 
   renderSink() {
     if (!this.state.selection || this.props.disableInteractions) {
-      return <div style={{height: 28}} />;
+      return null;
     }
 
     const toolList = [

@@ -179,6 +179,7 @@ module.exports = {
                   // https://github.com/facebookincubator/create-react-app/issues/2677
                   ident: 'postcss',
                   plugins: () => [
+                    require('postcss-nested'),
                     require('postcss-flexbugs-fixes'),
                     autoprefixer({
                       browsers: [
@@ -221,6 +222,7 @@ module.exports = {
                 options: {
                   ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
                   plugins: () => [
+                    require('postcss-nested'),
                     require('postcss-flexbugs-fixes'),
                     autoprefixer({
                       browsers: [

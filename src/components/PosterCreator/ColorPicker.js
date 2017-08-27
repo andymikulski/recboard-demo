@@ -1,6 +1,5 @@
 
 import React from 'react'
-import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
 
 export default class ColorPicker extends React.Component {
@@ -49,48 +48,19 @@ export default class ColorPicker extends React.Component {
   };
 
   render() {
-
-    const styles = reactCSS({
-      'default': {
-        color: {
-          width: '36px',
-          height: '14px',
-          borderRadius: '2px',
-          background: `rgba(${ this.state.color.r }, ${ this.state.color.g }, ${ this.state.color.b }, ${ this.state.color.a })`,
-        },
-        swatch: {
-          padding: '5px',
-          background: '#fff',
-          borderRadius: '1px',
-          boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-          display: 'inline-block',
-          cursor: 'pointer',
-        },
-        popover: {
-          position: 'absolute',
-          zIndex: '2',
-        },
-        cover: {
-          position: 'fixed',
-          top: '0px',
-          right: '0px',
-          bottom: '0px',
-          left: '0px',
-        },
-      },
-    });
-
+    const colorBg = `rgba(${ this.state.color.r }, ${ this.state.color.g }, ${ this.state.color.b }, ${ this.state.color.a })`;
     return (
-      <span>
-        <div style={ styles.swatch } onClick={ this.handleClick }>
-          <div style={ styles.color } />
+      <span className="color-picker">
+        <div className="swatch" onClick={ this.handleClick }>
+          <div className="color" style={{ backgroundColor: colorBg }} />
         </div>
-        <label style={{margin:"0 1em", textTransform: 'capitalize'}}>{ this.props.label }</label>
-        { this.state.displayColorPicker ? <div style={ styles.popover }>
-          <div style={ styles.cover } onClick={ this.handleClose }/>
-          <SketchPicker color={ this.state.color } onChange={ this.handleChange } />
-        </div> : null }
-
+        <label>{ this.props.label }</label>
+        { this.state.displayColorPicker &&
+          <div className="popover">
+            <div className="cover" onClick={ this.handleClose }/>
+            <SketchPicker color={ this.state.color } onChange={ this.handleChange } />
+          </div>
+        }
       </span>
     )
   }

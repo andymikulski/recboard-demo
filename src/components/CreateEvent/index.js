@@ -22,6 +22,8 @@ export class CreateEvent extends Component {
   }
 
   togglePosterCreator(evt) {
+    // If it's a keyboard event, they're probably hitting escape, so we can
+    // prevent accidental modal closes while trying to deselect.
     if(evt.type.indexOf('key') > -1){
       return;
     }
