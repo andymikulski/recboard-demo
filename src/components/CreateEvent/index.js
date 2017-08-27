@@ -21,7 +21,10 @@ export class CreateEvent extends Component {
     this.togglePosterCreator = this.togglePosterCreator.bind(this);
   }
 
-  togglePosterCreator() {
+  togglePosterCreator(evt) {
+    if(evt.type.indexOf('key') > -1){
+      return;
+    }
     this.setState({
       creatorVisible: !this.state.creatorVisible,
     });
