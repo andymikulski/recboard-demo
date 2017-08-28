@@ -11,7 +11,7 @@ const FormItem = Form.Item;
 @autobind
 export default class DetailContents extends Component {
 
-  static nl2br(str) {
+  static nl2br(str = '') {
     return str.split('\n').map(line => <span>{line}<br /></span>);
   }
 
@@ -56,7 +56,7 @@ export default class DetailContents extends Component {
             <h1>{details.eventName}</h1>
             <p>{DetailContents.nl2br(details.eventDescription)}</p>
             <FormItem {...formItemLayout} label="Event Hosts">
-              {details.eventHosts.map(host=>
+              {(details.eventHosts || []).map(host=>
                 <div className="hosted-by">
                   <Avatar size="large" shape="square" icon="user" />
                   <label>{host.label}</label>
