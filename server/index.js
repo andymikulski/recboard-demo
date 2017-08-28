@@ -36,7 +36,35 @@ app.get('/', (req, res) => {
 
 app.get('/events/list', (req, res)=>{
   const results = db.get('events', []);
-  res.json(results);
+
+  let current = [];
+  let upcoming = [];
+  let past = [];
+
+  if (results.length) {
+    const now = moment();
+    results.forEach(item=>{
+      const eventStart = moment(item.startDateTime);
+
+      const hasntHappenedYet = now.isBefore(eventStart);
+      const isHappeningNow = now.isAfter(moment(item.startDateTime)) && now.isBefore(moment(item.endDateTime));
+      const alreadyHappened = now.isAfter(moment(item.endDateTime));
+
+      if (hasntHappenedYet) {
+        upcoming.push(item);
+      } else if (isHappeningNow) {
+        current.push(item);
+      } else if (alreadyHappened) {
+        past.push(item);
+      }
+    });
+  }
+  
+  res.json({
+    upcoming,
+    current,
+    past,
+  });
 });
 
 app.get('/events/:id', (req,res)=>{

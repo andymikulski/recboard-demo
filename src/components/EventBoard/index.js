@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Icon, Button } from 'antd';
 import { Link } from 'react-router'
 import CurrentEvents from './CurrentEvents';
-import UpcomingEvents from './UpcomingEvents';
-import PastEvents from './PastEvents';
-import EventSearch from './EventSearch';
+import EventListing from './EventListing';
 import QueryEventListing from './QueryEventListing';
+import EventPoster from './EventPoster';
+
 import autobind from 'autobind-decorator';
 import moment from 'moment';
 import './styles.css';
@@ -18,37 +18,50 @@ export default class EventBoard extends Component {
     past: [],
   };
 
-  // Processes the listing given back from the api and determines what should
-  // be shown where.
+  static ColumnConfig = [{
+    title: 'Name',
+    dataIndex: 'eventName',
+    key: 'name',
+    render: text => <div>{text}</div>,
+  }, {
+    title: 'Poster',
+    key: 'poster',
+    render: (item) =>
+      <EventPoster poster={item.eventPoster} />,
+  }, {
+    title: 'Hosts',
+    key: 'hosts',
+    render: (item) =>{
+      const printedHosts = item.eventHosts.map(host => <span>{host.label}</span>);
+      return <div className="hosts-col">{printedHosts}</div>;
+    }
+  }, {
+    title: 'Date',
+    key: 'date',
+    render: (item) => {
+      const start = moment(item.startDateTime).format('l');
+      const end = moment(item.endDateTime).format('l');
+
+      // Titles are applied to times, so on hover they reveal the full date.
+      const tipFormat = 'dddd, MMMM Do YYYY, h:mm a';
+      const startTip = moment(item.startDateTime).format(tipFormat);
+      const endTip = moment(item.endDateTime).format(tipFormat);
+
+      return (
+        <div className="date-col">
+          <span title={startTip}>{start}</span> &ndash; <span title={endTip}>{end}</span>
+        </div>
+      )
+    },
+  }, {
+    title: '',
+    key: 'action',
+    render: (item) =>
+      <Link to={`/events/${item.id}`}><Button size="small">View Details</Button></Link>,
+  }];
+
   updateListing(listing) {
-    const now = moment();
-
-    let current = [];
-    let upcoming = [];
-    let past = [];
-
-    listing.forEach(item=>{
-      console.log('hi', item.startDateTime, item.endDateTime);
-      const eventStart = moment(item.startDateTime);
-
-      const hasntHappenedYet = now.isBefore(eventStart);
-      const isHappeningNow = now.isAfter(moment(item.startDateTime)) && now.isBefore(moment(item.endDateTime));
-      const alreadyHappened = now.isAfter(moment(item.endDateTime));
-
-      if (hasntHappenedYet) {
-        upcoming.push(item);
-      } else if (isHappeningNow) {
-        current.push(item);
-      } else if (alreadyHappened) {
-        past.push(item);
-      }
-    });
-
-    this.setState({
-      upcoming,
-      current,
-      past,
-    });
+    this.setState({ ...listing });
   }
 
   render() {
@@ -58,8 +71,8 @@ export default class EventBoard extends Component {
         <QueryEventListing onLoad={this.updateListing} />
         <Link to={`events/new`}><Button type="primary">Create An Event</Button></Link>;
         <CurrentEvents list={this.state.current} />
-        <UpcomingEvents list={this.state.upcoming} />
-        <PastEvents list={this.state.past} />
+        <EventListing columns={EventBoard.ColumnConfig} title="Upcoming Events" list={this.state.upcoming} />
+        <EventListing columns={EventBoard.ColumnConfig} title="Past Events" list={this.state.past} />
       </div>
     );
   }

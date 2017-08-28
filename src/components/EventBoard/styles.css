@@ -36,3 +36,23 @@
 .event-poster {
   pointer-events: none;
 }
+
+.date-col,
+.hosts-col {
+  span {
+    display: inline-block;
+  }
+}
+
+.hosts-col {
+  span {
+    &:after {
+      content: ',';
+      margin-right: 0.25em;
+    }
+    &:last-child:after {
+      content: none;
+      margin-right: 0;
+    }
+  }
+}
