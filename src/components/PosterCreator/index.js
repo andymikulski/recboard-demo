@@ -92,19 +92,38 @@ export default class PosterCreator extends Component {
     )
   }
 
+  clearSelection() {
+    this.artboard.discardActiveObject();
+    this.artboard.renderAll();
+  }
+
   sendSelectionBack() {
     this.artboard.sendBackwards(this.state.selection);
+    this.artboard.renderAll();
   }
 
   bringSelectionForward() {
     this.artboard.bringForward(this.state.selection);
+    this.artboard.renderAll();
+  }
+
+  flipHorizontal() {
+    this.state.selection.set('flipX', !this.state.selection.flipX);
+    this.artboard.renderAll();
+  }
+
+  flipVertical() {
+    this.state.selection.set('flipY', !this.state.selection.flipY);
+    this.artboard.renderAll();
   }
 
   sendAllWayBack() {
     this.artboard.sendToBack(this.state.selection);
+    this.artboard.renderAll();
   }
   bringAllWayFront() {
     this.artboard.bringToFront(this.state.selection);
+    this.artboard.renderAll();
   }
 
   cloneActiveSelection() {
@@ -127,24 +146,34 @@ export default class PosterCreator extends Component {
   getMenuForSelection() {
     return (
       <ContextMenu hideOnLeave id="selection">
-        <MenuItem onClick={this.cloneActiveSelection.bind(this)}>
+        <MenuItem onClick={this.clearSelection}>
+          Deselect
+        </MenuItem>
+        <MenuItem onClick={this.cloneActiveSelection}>
           Duplicate
         </MenuItem>
         <MenuItem divider />
-        <MenuItem onClick={this.bringAllWayFront.bind(this)}>
+        <MenuItem onClick={this.flipHorizontal}>
+          Flip Horizontal
+        </MenuItem>
+        <MenuItem onClick={this.flipVertical}>
+          Flip Vertical
+        </MenuItem>
+        <MenuItem divider />
+        <MenuItem onClick={this.bringAllWayFront}>
           Bring To Front
         </MenuItem>
-        <MenuItem onClick={this.bringSelectionForward.bind(this)}>
+        <MenuItem onClick={this.bringSelectionForward}>
           Bring Forward
         </MenuItem>
-        <MenuItem onClick={this.sendSelectionBack.bind(this)}>
+        <MenuItem onClick={this.sendSelectionBack}>
           Send Backward
         </MenuItem>
-        <MenuItem onClick={this.sendAllWayBack.bind(this)}>
+        <MenuItem onClick={this.sendAllWayBack}>
           Send To Back
         </MenuItem>
         <MenuItem divider />
-        <MenuItem onClick={this.removeSelection.bind(this)}>
+        <MenuItem onClick={this.removeSelection}>
           Remove
         </MenuItem>
       </ContextMenu>
@@ -223,27 +252,27 @@ export default class PosterCreator extends Component {
   getMenuForCanvas() {
     return (
       <ContextMenu hideOnLeave id="canvas">
-          <SubMenu title='Add'>
-            <SubMenu title='Basic'>
+          <SubMenu title='Add' hoverDelay={0}>
+            <SubMenu title='Basic' hoverDelay={0}>
               <MenuItem onClick={this.spawnPrimitive('text')}>Text</MenuItem>
               <MenuItem onClick={this.spawnPrimitive('rect')}>Rect</MenuItem>
               <MenuItem onClick={this.spawnPrimitive('circle')}>Circle</MenuItem>
               <MenuItem onClick={this.spawnPrimitive('triangle')}>Triangle</MenuItem>
               <MenuItem onClick={this.spawnPrimitive('line')}>Line</MenuItem>
             </SubMenu>
-            <SubMenu title='Items'>
+            <SubMenu title='Items' hoverDelay={0}>
               <MenuItem onClick={this.spawnImage('pots', 'png')}>Pots</MenuItem>
               <MenuItem onClick={this.spawnImage('lumberjack-box', 'png')}>Box (Lumberjack)</MenuItem>
               <MenuItem onClick={this.spawnImage('frisbee-box', 'png')}>Box (Frisbee)</MenuItem>
             </SubMenu>
-            <SubMenu title='Weapons'>
+            <SubMenu title='Weapons' hoverDelay={0}>
               <MenuItem onClick={this.spawnImage('blue-grenade', 'png')}>Grenade (Blue)</MenuItem>
               <MenuItem onClick={this.spawnImage('blue-pistol', 'png')}>Pistol (Blue)</MenuItem>
               <MenuItem onClick={this.spawnImage('blue-repeater', 'png')}>Repeater (Blue)</MenuItem>
               <MenuItem onClick={this.spawnImage('blue-shotgun', 'png')}>Shotgun (Blue)</MenuItem>
               <MenuItem onClick={this.spawnImage('blue-sniper', 'png')}>Sniper (Blue)</MenuItem>
             </SubMenu>
-            <SubMenu title='Backgrounds'>
+            <SubMenu title='Backgrounds' hoverDelay={0}>
               <MenuItem onClick={this.spawnImage('quest-start')}>Quest Room</MenuItem>
               <MenuItem onClick={this.spawnImage('clearcut')}>Clearcut</MenuItem>
               <MenuItem onClick={this.spawnImage('homestead')}>Homestead</MenuItem>

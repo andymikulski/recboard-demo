@@ -1,6 +1,11 @@
 .hosted-by {
   display: flex;
   align-items: center;
+  margin-bottom: 1em;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   label {
     margin-left: 0.5em;
@@ -10,10 +15,22 @@
 .detail-contents {
   font-size: 14px;
 
+  h1 {
+    margin-bottom: 0.25em;
+    font-size: 2.5em;
+    font-weight: 900;
+    
+    & + p {
+      display: block;
+      margin-bottom: 2em;
+    }
+  }
+
+
   .ant-row {
     font-size: 14px;
   }
-  
+
   .ant-form-item-label label {
     font-weight: bold;
     font-size: 1.15em;
