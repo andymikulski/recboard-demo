@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 
 export default class EventPoster extends PureComponent {
   removeDimensions(container) {
-    const el = container.querySelector('svg');
-    if (!el) {
+    if (!container) {
       return;
     }
+    const el = container.querySelector('svg');
 
     el.removeAttribute('height');
     el.removeAttribute('width');
@@ -13,7 +13,11 @@ export default class EventPoster extends PureComponent {
 
   render() {
     return (
-      <div ref={this.removeDimensions} dangerouslySetInnerHTML={{ __html: this.props.poster[1] }} />
+      <div
+        className="event-poster"
+        ref={this.removeDimensions}
+        dangerouslySetInnerHTML={{ __html: this.props.poster[1] }}
+      />
     );
   }
 }

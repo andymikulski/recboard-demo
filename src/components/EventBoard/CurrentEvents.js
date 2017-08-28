@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { Card, Button } from 'antd';
 import { Link } from 'react-router'
 import EventPoster from './EventPoster';
@@ -18,7 +19,7 @@ const data = [{
   endsAt: Date.now() + 50000,
 }];
 
-const ViewMore = ({ url })=><Link to={`event/${url}`}><Button type="primary" size="small">Details</Button></Link>;
+const ViewMore = ({ url })=><Link to={`events/${url}`}><Button type="primary" size="small">Details</Button></Link>;
 
 export default class CurrentEvents extends Component {
   static defaultProps = {
@@ -33,10 +34,13 @@ export default class CurrentEvents extends Component {
           {
             this.props.list.map((event)=>{
               return (
-                <Card key={event.id} title={event.name} extra={<ViewMore url={event.id} />} className="event-card">
+                <Card key={event.id} title={event.eventName} extra={<ViewMore url={event.id} />} className="event-card">
                   <EventPoster poster={event.eventPoster} />
-                  <p>Card content</p>
-                  <p>Ends at { (new Date(event.endsAt)).toLocaleString() }</p>
+                  <p>{ event.eventDescription }</p>
+                  <p>
+                    <span title={moment(event.startDateTime).format('M/D/Y, h:mm a')}>Started { moment(event.startDateTime).fromNow(true) } ago &bull;&nbsp;</span>
+                    <span title={moment(event.endDateTime).format('M/D/Y, h:mm a')}>Ends { moment(event.endDateTime).fromNow() }</span>
+                  </p>
                 </Card>
               );
             })

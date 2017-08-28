@@ -39,7 +39,7 @@ class CreateEvent extends Component {
             }
           });
 
-        fetch('http://localhost:3333/event/new', {
+        fetch('http://localhost:3333/events/new', {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ class CreateEvent extends Component {
         .then(res => res.json())
         .then((results) => {
           if (results) {
-            browserHistory.push(`/event/${results.id}`);
+            browserHistory.push(`/events/${results.id}`);
           }
         });
       }

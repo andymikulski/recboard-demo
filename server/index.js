@@ -2,6 +2,25 @@ const express = require('express')
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const moment = require('moment');
+
+const combineDateTime = (date, time) => {
+  if (!(date instanceof moment)){
+    date = moment(date);
+  }
+  if (!(time instanceof moment)){
+    time = moment(time);
+  }
+  const combined = moment();
+
+  combined.year(date.year());
+  combined.month(date.month());
+  combined.date(date.date()); // Date!...Date..!...Date....!
+  combined.hour(time.hour());
+  combined.minute(time.minute());
+
+  return combined;
+}
 
 class MemoryDB {
   constructor(){
@@ -17,7 +36,7 @@ class MemoryDB {
     this.store[key] = value;
   }
 
-  find(type, qualifiers){
+  find(type, qualifiers, defaultTo){
     const found = [];
     const store = this.store[type] || [];
     store.forEach((item)=>{
@@ -38,7 +57,7 @@ class MemoryDB {
       }
     });
 
-    return found;
+    return typeof found === 'undefined' ? defaultTo : found;
   }
 }
 
@@ -51,21 +70,28 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 })
 
-app.get('/event/list', (req, res)=>{
+app.get('/events/list', (req, res)=>{
   const results = db.get('events', []);
   res.json(results);
 });
 
-app.get('/event/:id', (req,res)=>{
-  const results = db.find('events', { id: req.params.id });
-  res.json(results);
+app.get('/events/:id', (req,res)=>{
+  const results = db.find('events', { id: req.params.id }, []);
+  res.json(results[0]);
 });
 
-app.post('/event/new', (req, res)=>{
+app.post('/events/new', (req, res)=>{
   const events = db.get('events', []);
   const id = events.length + 1;
+  const startDateTime = combineDateTime(req.body.eventStartDate, req.body.eventStartTime).valueOf();
+  const endDateTime = combineDateTime(req.body.eventEndDate, req.body.eventEndTime).valueOf();
 
-  const newEvent = Object.assign({}, req.body, { id });
+  const additionalProps = {
+    id,
+    startDateTime,
+    endDateTime,
+  };
+  const newEvent = Object.assign({}, req.body, additionalProps);
 
   db.set('events', events.concat([newEvent]));
   res.json({ status: 'success', id });

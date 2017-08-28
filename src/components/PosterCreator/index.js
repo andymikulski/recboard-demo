@@ -31,6 +31,7 @@ export default class PosterCreator extends Component {
 
   state = {
     selection: null,
+    hasArtboard: false,
   };
 
   constructor(props){
@@ -44,7 +45,7 @@ export default class PosterCreator extends Component {
   }
 
   renderSink() {
-    if (!this.state.selection || this.props.disableInteractions) {
+    if (!this.state.hasArtboard || this.props.disableInteractions) {
       return null;
     }
 
@@ -54,14 +55,22 @@ export default class PosterCreator extends Component {
     ];
 
     return (
-      <div key={this.state.selection}>
-        { toolList.map((prop)=>
-          <ColorPicker
-            color={this.state.selection[prop]}
-            onChange={(color)=>this.handleColorChange(this.state.selection, prop, color)}
-            label={prop}
-          />
-        )}
+      <div className="sink" key={this.state.selection}>
+        <ColorPicker
+          color={this.artboard.backgroundColor}
+          onChange={(color)=>this.handleColorChange(this.artboard, 'backgroundColor', color)}
+          label={'Canvas Background'}
+        />
+
+        { this.state.selection &&
+          toolList.map((prop)=>
+            <ColorPicker
+              color={this.state.selection[prop]}
+              onChange={(color)=>this.handleColorChange(this.state.selection, prop, color)}
+              label={prop}
+            />
+          )
+        }
       </div>
     );
   }
@@ -100,10 +109,11 @@ export default class PosterCreator extends Component {
 
   cloneActiveSelection() {
     this.state.selection.clone((clone)=>{
-      clone.set('top', clone.top - 15);
+      clone.set('top', clone.top + 15);
       clone.set('left', clone.left + 15);
 
       this.artboard.add(clone);
+      this.artboard.setActiveObject(clone);
     });
   }
 
@@ -250,14 +260,6 @@ export default class PosterCreator extends Component {
     window.removeEventListener('keyup', this.keyupHandler);
   }
 
-  // componentWillReceiveProps(newProps){
-  //   console.log('wtf', newProps, this.props);
-  //   if(newProps.value !== this.props.value){
-  //     this.artboard.clear();
-  //     this.loadJSON(newProps.value);
-  //   }
-  // }
-
   loadJSON(saved, lastSeenSize) {
     if (typeof saved === 'string') { saved = JSON.parse(saved); }
     // Determine how big we are compared to full size.
@@ -298,6 +300,9 @@ export default class PosterCreator extends Component {
       preserveObjectStacking: true,
     });
 
+    this.setState({
+      hasArtboard: true,
+    });
 
     this.artboard.on('object:selected', ({ target })=>{
       this.setState({
@@ -321,25 +326,7 @@ export default class PosterCreator extends Component {
       return;
     }
 
-    console.log('hi', this.props.value);
-    // #TODO: scale the initial objects. Small screens overflow, currently.
-    if (!inProgress){
-      fabric.Image.fromURL('/clearcut.jpg', (oImg)=>{
-        var text = new fabric.IText('hello world', {
-          fill: 'rgba(255,255,255,1)',
-          stroke: 'rgba(0,0,0,1)',
-          strokeWidth: 2,
-          fontFamily: "Impact, sans-serif",
-          fontWeight: 900,
-        });
-
-        text.center();
-        oImg.center();
-
-        this.artboard.add(oImg, text).renderAll();
-        this.saveCanvas(true);
-      });
-    } else {
+    if (inProgress) {
       const lastSeenSize = localStorage.getItem('poster-size');
       setTimeout(()=>this.loadJSON(inProgress, lastSeenSize), 1);
     }

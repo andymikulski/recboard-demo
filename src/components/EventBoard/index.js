@@ -18,24 +18,6 @@ export default class EventBoard extends Component {
     past: [],
   };
 
-  combineDateTime(date, time){
-    if (!(date instanceof moment)){
-      date = moment(date);
-    }
-    if (!(time instanceof moment)){
-      time = moment(time);
-    }
-    const combined = moment();
-
-    combined.year(date.year());
-    combined.month(date.month());
-    combined.date(date.date()); // Date!...Date..!...Date....!
-    combined.hour(time.hour());
-    combined.minute(time.minute());
-
-    return combined;
-  }
-
   // Processes the listing given back from the api and determines what should
   // be shown where.
   updateListing(listing) {
@@ -46,15 +28,13 @@ export default class EventBoard extends Component {
     let past = [];
 
     listing.forEach(item=>{
-      // figure out a single date from the event's date and times
-      // this should be done somewhere else
-      const startDateTime = this.combineDateTime(item.eventStartDate, item.eventStartTime);
-      const endDateTime = this.combineDateTime(item.eventEndDate, item.eventEndTime);
+      console.log('hi', item.startDateTime, item.endDateTime);
+      const eventStart = moment(item.startDateTime);
 
-      const hasntHappenedYet = now.isBefore(startDateTime);
-      const isHappeningNow = now.isAfter(startDateTime) && now.isBefore(endDateTime);
-      const alreadyHappened = now.isAfter(endDateTime);
-      
+      const hasntHappenedYet = now.isBefore(eventStart);
+      const isHappeningNow = now.isAfter(moment(item.startDateTime)) && now.isBefore(moment(item.endDateTime));
+      const alreadyHappened = now.isAfter(moment(item.endDateTime));
+
       if (hasntHappenedYet) {
         upcoming.push(item);
       } else if (isHappeningNow) {
@@ -72,11 +52,11 @@ export default class EventBoard extends Component {
   }
 
   render() {
+    // <EventSearch />
     return (
       <div className="event-board">
         <QueryEventListing onLoad={this.updateListing} />
         <Link to={`events/new`}><Button type="primary">Create An Event</Button></Link>;
-        <EventSearch />
         <CurrentEvents list={this.state.current} />
         <UpcomingEvents list={this.state.upcoming} />
         <PastEvents list={this.state.past} />
