@@ -81,7 +81,7 @@ class CreateEvent extends Component {
         >
           {getFieldDecorator('eventName', {
             rules: [
-              { required: false, message: 'Please enter an event name.' },
+              { required: true, message: 'Please enter an event name.' },
             ],
           })(<Input size="large" />)}
         </FormItem>
@@ -92,7 +92,7 @@ class CreateEvent extends Component {
         >
         {getFieldDecorator('eventDescription', {
           rules: [
-            { required: false, message: 'Please enter a description for the event.' },
+            { required: true, message: 'Please enter a description for the event.' },
           ],
         })(<TextArea
             placeholder="Tell us what your event is about, what you will be doing, etc."
@@ -108,26 +108,26 @@ class CreateEvent extends Component {
             <InputGroup compact>
               {getFieldDecorator('eventStartDate', {
                 rules: [
-                  { required: false, message: 'Please select a start date for the event.', type: 'object' },
+                  { required: true, message: 'Please select a start date for the event.', type: 'object' },
                 ],
               })(<DatePicker placeholder="Start Date" size="large" style={{ width: '40%' }}/>)}
 
               {getFieldDecorator('eventStartTime', {
                 rules: [
-                  { required: false, message: 'Please select a start time for the event.', type: 'object' },
+                  { required: true, message: 'Please select a start time for the event.', type: 'object' },
                 ],
               })(<TimePicker placeholder="Start Time" size="large" use12Hours format="h:mm a" />)}
             </InputGroup>
             <InputGroup compact>
               {getFieldDecorator('eventEndDate', {
                 rules: [
-                  { required: false, message: 'Please select an end date for the event.', type: 'object' },
+                  { required: true, message: 'Please select an end date for the event.', type: 'object' },
                 ],
               })(<DatePicker placeholder="End Date" size="large" style={{ width: '40%' }}/>)}
 
               {getFieldDecorator('eventEndTime', {
                 rules: [
-                  { required: false, message: 'Please select an end time for the event.', type: 'object' },
+                  { required: true, message: 'Please select an end time for the event.', type: 'object' },
                 ],
               })(<TimePicker placeholder="End Time" size="large" use12Hours format="h:mm a" />)}
             </InputGroup>
@@ -140,7 +140,7 @@ class CreateEvent extends Component {
         >
           {getFieldDecorator('eventLocation', {
             rules: [
-              { required: false, message: 'Please enter an event name.' },
+              { required: true, message: 'Please enter an event name.' },
             ],
           })(
             <Select
@@ -162,7 +162,7 @@ class CreateEvent extends Component {
         >
           {getFieldDecorator('eventHosts', {
             rules: [
-              { required: false, message: 'Please select at least one event host.' },
+              { required: true, message: 'Please select at least one event host.' },
             ],
           })(
             <UserPicker
