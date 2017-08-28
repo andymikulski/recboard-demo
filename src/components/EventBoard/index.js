@@ -32,7 +32,7 @@ export default class EventBoard extends Component {
     title: 'Hosts',
     key: 'hosts',
     render: (item) =>{
-      const printedHosts = item.eventHosts.map(host => <span>{host.label}</span>);
+      const printedHosts = (item.eventHosts || []).map(host => <span>{host.label}</span>);
       return <div className="hosts-col">{printedHosts}</div>;
     }
   }, {

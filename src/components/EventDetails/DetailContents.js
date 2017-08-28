@@ -29,7 +29,7 @@ export default class DetailContents extends Component {
     };
 
     return (
-      <div style={{fontSize: '14px'}}>
+      <div className="detail-contents">
         <EventPoster poster={details.eventPoster} />
         <div className="alert-bar">
           {

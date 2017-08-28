@@ -271,6 +271,9 @@ export default class PosterCreator extends Component {
       return scaleObject(obj, factor);
     });
 
+    // Apply the background color to our artboard. loadFromJSON doesn't do it for us, apparently.
+    this.artboard.backgroundColor = saved.background || saved.backgroundColor || this.artboard.backgroundColor;
+
     // Import the SVG elements.
     this.artboard.loadFromJSON(saved, ()=>{ this.artboard.renderAll(); });
   }
