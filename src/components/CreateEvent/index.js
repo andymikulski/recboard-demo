@@ -31,7 +31,13 @@ class CreateEvent extends Component {
     evt.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+
+        ['eventStartDate', 'eventStartTime', 'eventEndDate', 'eventEndTime']
+          .forEach((prop)=>{
+            if (values[prop] && values[prop].valueOf){
+              values[prop] = values[prop].valueOf();
+            }
+          });
 
         fetch('http://localhost:3333/event/new', {
           headers: {
@@ -75,7 +81,7 @@ class CreateEvent extends Component {
         >
           {getFieldDecorator('eventName', {
             rules: [
-              { required: true, message: 'Please enter an event name.' },
+              { required: false, message: 'Please enter an event name.' },
             ],
           })(<Input size="large" />)}
         </FormItem>
@@ -86,7 +92,7 @@ class CreateEvent extends Component {
         >
         {getFieldDecorator('eventDescription', {
           rules: [
-            { required: true, message: 'Please enter a description for the event.' },
+            { required: false, message: 'Please enter a description for the event.' },
           ],
         })(<TextArea
             placeholder="Tell us what your event is about, what you will be doing, etc."
@@ -102,26 +108,26 @@ class CreateEvent extends Component {
             <InputGroup compact>
               {getFieldDecorator('eventStartDate', {
                 rules: [
-                  { required: true, message: 'Please select a start date for the event.', type: 'object' },
+                  { required: false, message: 'Please select a start date for the event.', type: 'object' },
                 ],
               })(<DatePicker placeholder="Start Date" size="large" style={{ width: '40%' }}/>)}
 
               {getFieldDecorator('eventStartTime', {
                 rules: [
-                  { required: true, message: 'Please select a start time for the event.', type: 'object' },
+                  { required: false, message: 'Please select a start time for the event.', type: 'object' },
                 ],
               })(<TimePicker placeholder="Start Time" size="large" use12Hours format="h:mm a" />)}
             </InputGroup>
             <InputGroup compact>
               {getFieldDecorator('eventEndDate', {
                 rules: [
-                  { required: true, message: 'Please select an end date for the event.', type: 'object' },
+                  { required: false, message: 'Please select an end date for the event.', type: 'object' },
                 ],
               })(<DatePicker placeholder="End Date" size="large" style={{ width: '40%' }}/>)}
 
               {getFieldDecorator('eventEndTime', {
                 rules: [
-                  { required: true, message: 'Please select an end time for the event.', type: 'object' },
+                  { required: false, message: 'Please select an end time for the event.', type: 'object' },
                 ],
               })(<TimePicker placeholder="End Time" size="large" use12Hours format="h:mm a" />)}
             </InputGroup>
@@ -134,7 +140,7 @@ class CreateEvent extends Component {
         >
           {getFieldDecorator('eventHosts', {
             rules: [
-              { required: true, message: 'Please select at least one event host.' },
+              { required: false, message: 'Please select at least one event host.' },
             ],
           })(
             <UserPicker
@@ -155,19 +161,8 @@ class CreateEvent extends Component {
         <FormItem
           {...formItemLayout}
           label="Event Poster"
-        >
-          {getFieldDecorator('eventPoster')(<PosterCreator disableInteractions key={this.state.creatorVisible} />)}
-          <Button onClick={this.togglePosterCreator} type="primary" size="small" style={{ display: 'block', marginLeft: 'auto' }}>Edit Poster</Button>
-          <Modal
-            onOk={this.togglePosterCreator}
-            onClose={this.togglePosterCreator}
-            title="Event Poster Editor"
-            visible={this.state.creatorVisible}
-            okText="Save"
-            cancelText="Cancel"
-            width="70vw"
-          >{getFieldDecorator('eventPoster')(<PosterCreator />)}</Modal>
-        </FormItem>
+        />
+        {getFieldDecorator('eventPoster')(<PosterCreator key={this.state.creatorVisible} />)}
 
         <hr />
 

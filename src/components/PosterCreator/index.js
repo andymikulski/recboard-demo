@@ -250,12 +250,20 @@ export default class PosterCreator extends Component {
     window.removeEventListener('keyup', this.keyupHandler);
   }
 
+  // componentWillReceiveProps(newProps){
+  //   console.log('wtf', newProps, this.props);
+  //   if(newProps.value !== this.props.value){
+  //     this.artboard.clear();
+  //     this.loadJSON(newProps.value);
+  //   }
+  // }
+
   loadJSON(saved, lastSeenSize) {
     if (typeof saved === 'string') { saved = JSON.parse(saved); }
     // Determine how big we are compared to full size.
     const currentWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
-    const factor = currentWidth / parseFloat(lastSeenSize || '1');
-
+    const factor = currentWidth / PosterCreator.MAX_WIDTH;
+    console.log('factor', factor);
     saved.objects = saved.objects.map((obj)=>{
       return scaleObject(obj, factor);
     });
@@ -307,22 +315,26 @@ export default class PosterCreator extends Component {
     this.artboard.on('object:modified', this.saveCanvas.bind(this));
     this.artboard.on('object:added', this.saveCanvas.bind(this));
 
-    const inProgress = localStorage.getItem('poster');
+    const inProgress = this.props.value; // || localStorage.getItem('poster');
 
+    if (this.props.disableInteractions && !this.props.value) {
+      return;
+    }
+
+    console.log('hi', this.props.value);
     // #TODO: scale the initial objects. Small screens overflow, currently.
     if (!inProgress){
       fabric.Image.fromURL('/clearcut.jpg', (oImg)=>{
-        oImg.left = oImg.width / -2;
-        oImg.top = oImg.height / -2;
-
         var text = new fabric.IText('hello world', {
-          left: 100, top: 100,
           fill: 'rgba(255,255,255,1)',
           stroke: 'rgba(0,0,0,1)',
           strokeWidth: 2,
           fontFamily: "Impact, sans-serif",
           fontWeight: 900,
         });
+
+        text.center();
+        oImg.center();
 
         this.artboard.add(oImg, text).renderAll();
         this.saveCanvas(true);
@@ -335,15 +347,17 @@ export default class PosterCreator extends Component {
     this.onWindowResize(el, true);
   }
 
-  saveCanvas(force) {
-    const saved = this.artboard.toObject();
-    const savedString = JSON.stringify(saved);
-    localStorage.setItem('poster', savedString);
+  saveCanvas() {
+    // const saved = this.artboard.toObject();
+    // const savedString = JSON.stringify(saved);
+    // localStorage.setItem('poster', savedString);
+    //
+    // const baseWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
+    // localStorage.setItem('poster-size', baseWidth);
 
-    const baseWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
-    localStorage.setItem('poster-size', baseWidth);
-
-    this.props.onChange && this.props.onChange([savedString, baseWidth]);
+    if (this.props.onChange){
+      this.props.onChange([this.artboard.toObject(), this.artboard.toSVG()]);
+    }
   }
 
   onWindowResize() {
@@ -373,9 +387,8 @@ function zoomIt(canvas, factor, bW, bH) {
   }
 
   var objects = canvas.getObjects();
-  for (var i in objects) {
-    scaleObject(objects[i], factor)
-  }
+  objects = objects.map((obj)=>scaleObject(obj, factor));
+
   canvas.renderAll();
   canvas.calcOffset();
 }

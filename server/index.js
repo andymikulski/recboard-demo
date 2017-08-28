@@ -66,6 +66,7 @@ app.post('/event/new', (req, res)=>{
   const id = events.length + 1;
 
   const newEvent = Object.assign({}, req.body, { id });
+
   db.set('events', events.concat([newEvent]));
   res.json({ status: 'success', id });
 });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Button } from 'antd';
 import { Link } from 'react-router'
-
+import EventPoster from './EventPoster';
 import './styles.css';
 
 const data = [{
@@ -34,7 +34,7 @@ export default class CurrentEvents extends Component {
             this.props.list.map((event)=>{
               return (
                 <Card key={event.id} title={event.name} extra={<ViewMore url={event.id} />} className="event-card">
-                  <img src="http://i.imgur.com/Wy2qRbp.jpg" />
+                  <EventPoster poster={event.eventPoster} />
                   <p>Card content</p>
                   <p>Ends at { (new Date(event.endsAt)).toLocaleString() }</p>
                 </Card>
