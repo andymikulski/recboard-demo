@@ -316,6 +316,17 @@ export default class PosterCreator extends Component {
     }
     this.canvasElement = el;
 
+    // Need to do some weird attribute removal in order to prevent the canvas from
+    // being huge when embedded.
+    setTimeout(()=>{
+      const canvases = Array.prototype.slice.call(this.canvasElement.querySelectorAll('canvas'));
+      canvases.forEach(canvas=>{
+        canvas.removeAttribute('height');
+        canvas.removeAttribute('width');
+      });
+      this.artboard.renderAll();
+    }, 10);
+
     this.resizeHandler = window.addEventListener('resize', ()=>this.onWindowResize(el));
     this.keyupHandler = window.addEventListener('keyup', (event)=>{
       if (!this.state.selection || !this.artboard){ return; }
