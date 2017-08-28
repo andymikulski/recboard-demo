@@ -35,6 +35,7 @@ export default class Home extends Component {
 	        	<li>React (via <a href="https://github.com/facebookincubator/create-react-app" target="_blank">create-react-app</a>)</li>
 	        	<li>Webpack</li>
 	        	<li>Babel</li>
+	        	<li><a href="https://ant.design/" target="_blank">Ant Design</a></li>
 	        	<li><a href="http://fabricjs.com/" target="_blank">Fabric.js</a>
 	        		<ul className="feature-list">
 		        		<li>This library powers the Poster Creator and provides a lot of power to the user.</li>
@@ -50,12 +51,21 @@ export default class Home extends Component {
 	        	<li>Express</li>
 	        	<li>Custom JSON/Memory-based DB
 	        		<ul className="feature-list">
-		        		<li>For the proof of concept, we don't need anything really 'web scale'. Instead of dealing with getting a DB instance running somewhere, I decided to just build a DB into the node app's memory. The DB info is persisted to a JSON file which is loaded on startup.</li>
+		        		<li>For the proof of concept, we don't need anything really 'web scale'. Instead of dealing with getting a DB instance running somewhere, I decided to just build a DB into the node app's memory.</li>
+		        		<li>The DB info is persisted to a JSON file which is loaded on startup.</li>
 		        		<li>This is definitely not scalable beyond a simple POC, but switching to another database system would be easy.</li>
 	        		</ul>
         		</li>
-	        	<li><a href="http://fabricjs.com/" target="_blank">Fabric.js</a></li>
 	        </ul>
+	    </div>
+
+	    <div className="content">
+	    	<hr style={{marginBottom: '1em'}} />
+	        <h3>Dev Screenshots</h3>
+	        <p>You can find a small imgur album of in-progress screenshots <a href="http://imgur.com/a/ZtQ6E" target="_blank">here!</a></p>
+	        <div className="feature-list">
+	        	<img src="http://i.imgur.com/1ySVKeC.jpg" style={{maxHeight: 500}} />
+	        </div>
 	    </div>
       </div>
     );
