@@ -39,7 +39,7 @@ class CreateEvent extends Component {
             }
           });
 
-        fetch('http://localhost:3333/events/new', {
+        fetch('https://recboard-api.herokuapp.com/events/new', {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

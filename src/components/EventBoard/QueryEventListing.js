@@ -18,7 +18,7 @@ export default class QueryEventListing extends PureComponent {
   }
 
   getListing() {
-    fetch('http://localhost:3333/events/list')
+    fetch('https://recboard-api.herokuapp.com/events/list')
     .then(res => res.json())
     .then(listing => {
       this.props.onLoad(listing);
