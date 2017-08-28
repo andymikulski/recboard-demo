@@ -18,16 +18,24 @@ export default class EventDetails extends Component {
       message.error('No event found with that ID!');
       browserHistory.push(`/events`);
     }
+
     this.setState({
       details,
     });
   }
 
+  handleFailedLoad() {
+    message.error('Sorry, something went wrong. Try again later.');
+  }
+
   render() {
-    console.log('ok', this.state.details);
     return (
       <div className="event-details">
-        <QueryEventDetails id={this.props.routeParams.id} onLoad={this.handleEventLoad} />
+        <QueryEventDetails
+          id={this.props.routeParams.id}
+          onLoad={this.handleEventLoad}
+          onFailedLoad={this.handleFailedLoad}
+        />
         { this.state.details &&
           <div>
             <EventPoster poster={this.state.details.eventPoster} />

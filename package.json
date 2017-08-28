@@ -34,6 +34,7 @@
     "html-webpack-plugin": "2.29.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "20.0.4",
+    "jsonfile": "^3.0.1",
     "moment": "^2.18.1",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",

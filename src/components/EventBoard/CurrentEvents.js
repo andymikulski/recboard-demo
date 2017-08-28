@@ -27,12 +27,17 @@ export default class CurrentEvents extends Component {
   };
 
   render() {
+    const { list } = this.props;
+    if(!list || !list.length) {
+      return null;
+    }
+    
     return (
       <div className="current-event-board">
         <h1>Events Happening Now</h1>
         <div className="current-list">
           {
-            this.props.list.map((event)=>{
+            list.map((event)=>{
               return (
                 <Card key={event.id} title={event.eventName} extra={<ViewMore url={event.id} />} className="event-card">
                   <EventPoster poster={event.eventPoster} />

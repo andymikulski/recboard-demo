@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const moment = require('moment');
+const MemoryDB = require('./MemoryDB.js');
 
 const combineDateTime = (date, time) => {
   if (!(date instanceof moment)){
@@ -22,46 +23,9 @@ const combineDateTime = (date, time) => {
   return combined;
 }
 
-class MemoryDB {
-  constructor(){
-    this.store = {};
-  }
-
-  get(key, defaultTo){
-    const val = this.store[key];
-    return typeof val === 'undefined' ? defaultTo : val;
-  }
-
-  set(key, value){
-    this.store[key] = value;
-  }
-
-  find(type, qualifiers, defaultTo){
-    const found = [];
-    const store = this.store[type] || [];
-    store.forEach((item)=>{
-      let passes = true;
-
-      for(const qual in qualifiers) {
-        if(typeof qualifiers[qual] === 'function'){
-          passes = qualifiers[qual](item[qual]);
-        } else if(typeof item[qual] === 'string') {
-          passes = item[qual].indexOf(qualifiers[qual]) > -1;
-        } else {
-          passes = item[qual] == qualifiers[qual];
-        }
-      }
-
-      if(passes){
-        found.push(item);
-      }
-    });
-
-    return typeof found === 'undefined' ? defaultTo : found;
-  }
-}
 
 const db = new MemoryDB();
+db.loadMemory();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -76,8 +40,8 @@ app.get('/events/list', (req, res)=>{
 });
 
 app.get('/events/:id', (req,res)=>{
-  const results = db.find('events', { id: req.params.id }, []);
-  res.json(results[0]);
+  const results = db.find('events', { id: req.params.id });
+  res.json(results[0] || null);
 });
 
 app.post('/events/new', (req, res)=>{

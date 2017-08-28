@@ -6,6 +6,9 @@ export default class QueryEventDetails extends PureComponent {
     .then(res => res.json())
     .then(event => {
       this.props.onLoad(event);
+    })
+    .catch(err => {
+      this.props.onFailedLoad();
     });
   }
 
