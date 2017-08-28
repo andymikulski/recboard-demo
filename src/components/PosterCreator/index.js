@@ -158,6 +158,7 @@ export default class PosterCreator extends Component {
         oImg.set('top', this.artboard.getHeight() / 2);
 
         this.artboard.add(oImg);
+        this.artboard.setActiveObject(oImg);
       });
     };
   }
@@ -215,7 +216,7 @@ export default class PosterCreator extends Component {
       }
 
       this.artboard.add(newElement);
-
+      this.artboard.setActiveObject(newElement);
     }
   }
 

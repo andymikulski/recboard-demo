@@ -14,9 +14,17 @@ export default class ColorPicker extends React.Component {
   };
 
   componentWillMount() {
-    if (this.props.color) {
+    this.updateDisplayedColor(this.props.color);
+  }
+
+  componentWillReceiveProps({ color }){
+    this.updateDisplayedColor(color);
+  }
+
+  updateDisplayedColor(color){
+    if (color) {
       const reg =  /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/;
-      const split = this.props.color.match(reg);
+      const split = color.match(reg);
       if (!split) {
         return;
       }

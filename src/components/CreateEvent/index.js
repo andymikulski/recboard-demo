@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import React, { Component } from 'react';
-import { DatePicker, Input, TimePicker, Button, Form, Switch } from 'antd';
+import { DatePicker, Tooltip, Input, TimePicker, Button, Form, Switch } from 'antd';
 import { browserHistory } from 'react-router';
 import PosterCreator from '../PosterCreator';
 import UserPicker from './UserPicker';
@@ -151,7 +151,11 @@ class CreateEvent extends Component {
 
         <FormItem
           {...formItemLayout}
-          label="Private Event"
+          label={
+            <Tooltip title="If enabled, your event will not appear on the public event boards.">
+              Private Event
+            </Tooltip>
+          }
         >
           {getFieldDecorator('eventPrivate', { valuePropName: 'checked' })(
             <Switch />

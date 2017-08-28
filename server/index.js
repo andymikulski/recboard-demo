@@ -35,7 +35,10 @@ app.get('/', (req, res) => {
 })
 
 app.get('/events/list', (req, res)=>{
-  const results = db.get('events', []);
+  const results = db.find('events',
+    // Private events should NOT appear in public listings.
+    // Not loving this, but it's late. #todo
+    { eventPrivate: (val)=>(val === undefined || val === null) } , []);
 
   let current = [];
   let upcoming = [];
@@ -59,7 +62,7 @@ app.get('/events/list', (req, res)=>{
       }
     });
   }
-  
+
   res.json({
     upcoming,
     current,

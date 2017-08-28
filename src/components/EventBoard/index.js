@@ -60,6 +60,15 @@ export default class EventBoard extends Component {
       <Link to={`/events/${item.id}`}><Button size="small">View Details</Button></Link>,
   }];
 
+  static TimeUntilCol = {
+    title: 'Time Until',
+    key: 'time-until',
+    render: (item) => {
+      const start = moment(item.startDateTime);
+      return (<span>{ start.fromNow() }</span>);
+    },
+  }
+
   updateListing(listing) {
     this.setState({ ...listing });
   }
@@ -71,8 +80,16 @@ export default class EventBoard extends Component {
         <QueryEventListing onLoad={this.updateListing} />
         <Link to={`events/new`}><Button type="primary">Create An Event</Button></Link>;
         <CurrentEvents list={this.state.current} />
-        <EventListing columns={EventBoard.ColumnConfig} title="Upcoming Events" list={this.state.upcoming} />
-        <EventListing columns={EventBoard.ColumnConfig} title="Past Events" list={this.state.past} />
+        <EventListing
+          columns={EventBoard.ColumnConfig.concat([EventBoard.TimeUntilCol])}
+          title="Upcoming Events"
+          list={this.state.upcoming}
+        />
+        <EventListing
+          columns={EventBoard.ColumnConfig}
+          title="Past Events"
+          list={this.state.past}
+        />
       </div>
     );
   }
