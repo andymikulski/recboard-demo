@@ -80,7 +80,7 @@ export default class EventBoard extends Component {
     return (
       <div className="event-board">
         <QueryEventListing onLoad={this.updateListing} />
-        <Link to={`events/new`}><Button type="primary">Create An Event</Button></Link>;
+        <Link to={`events/new`}><Button type="primary">Create An Event</Button></Link>
         <CurrentEvents list={this.state.current} />
         <EventListing
           columns={EventBoard.ColumnConfig.concat([EventBoard.TimeUntilCol])}
