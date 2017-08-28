@@ -191,6 +191,7 @@ export default class PosterCreator extends Component {
 
         this.artboard.add(oImg);
         this.artboard.setActiveObject(oImg);
+        this.artboard.renderAll();
       });
     };
   }

@@ -7,9 +7,9 @@ export default class Home extends Component {
   render() {
     return (
       <div className="home">
-        <h1> woooooo </h1>
-        <Link to={'/inbox'}>Inbox</Link>
-        <div style={{ height: "5000px" }}>ok</div>
+        <h1>Welcome!</h1>
+        <p><b>This is a demo website developed for Against Gravity, prepared by Andy Mikulski.</b></p>
+        <p>This page will contain information on the project and will be updated as I write it.</p>
       </div>
     );
   }
