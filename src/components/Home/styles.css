@@ -1,0 +1,23 @@
+.home {
+	.content {
+		margin: 3em auto;
+	}
+}
+
+.feature-list {
+	margin: 1em;
+	list-style: square inside;
+	li {
+		margin-bottom: 0.5em;
+	}
+	img {
+		max-width: 100%;
+		display: block;
+		margin-left: 1.5em;
+		margin-bottom: 2em;
+	}
+
+	.feature-list {
+		list-style: circle inside;
+	}
+}

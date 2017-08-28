@@ -185,7 +185,7 @@ export default class PosterCreator extends Component {
 
   spawnImage(which, ext = 'jpg') {
     return () => {
-      fabric.Image.fromURL(`/${which}.${ext}`, (oImg)=>{
+      fabric.Image.fromURL(`http://recboard.herokuapp.com/${which}.${ext}`, (oImg)=>{
         oImg.set('left', this.artboard.getWidth() / 2);
         oImg.set('top', this.artboard.getHeight() / 2);
 
