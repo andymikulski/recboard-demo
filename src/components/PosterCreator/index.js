@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from "react-contextmenu";
 import ColorPicker from './ColorPicker';
+import KeyboardHelper from './KeyboardHelper';
 import '../../lib/react-contextmenu.css';
 import './styles.css';
 import { fabric } from 'fabric';
@@ -71,6 +72,8 @@ export default class PosterCreator extends Component {
             />
           )
         }
+
+        <KeyboardHelper />
       </div>
     );
   }

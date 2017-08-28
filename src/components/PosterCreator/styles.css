@@ -70,3 +70,18 @@ canvas {
     display: inherit;
   }
 }
+
+.help-button {
+  margin-left: auto;
+}
+
+.helper-list {
+  margin-bottom: 0.5em;
+  label {
+    font-weight: bold;
+    display: block;
+  }
+  li {
+    margin-bottom: 1em;
+  }
+}
