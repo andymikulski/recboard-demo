@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
 import { Link } from 'react-router'
 
 import './styles.css';

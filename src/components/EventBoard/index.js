@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Button } from 'antd';
+import { Button } from 'antd';
 import { Link } from 'react-router'
 import CurrentEvents from './CurrentEvents';
 import EventListing from './EventListing';

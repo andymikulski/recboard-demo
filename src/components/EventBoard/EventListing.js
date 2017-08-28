@@ -9,11 +9,23 @@ export default class EventListing extends Component {
     title: null,
   };
 
+  static localeConfig = {
+    emptyText: 'No events!',
+  };
+
   render() {
+    const {
+      title, columns, list,
+    } = this.props;
+
     return (
       <div className="event-board">
-        <h1>{ this.props.title }</h1>
-        <Table columns={this.props.columns} dataSource={this.props.list} />
+        <h1>{ title }</h1>
+        <Table
+          locale={EventListing.localeConfig}
+          columns={columns}
+          dataSource={list}
+        />
       </div>
     );
   }

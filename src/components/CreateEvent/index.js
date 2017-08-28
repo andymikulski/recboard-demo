@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import React, { Component } from 'react';
-import { Row, Col, DatePicker, Input,  TimePicker, Modal, Button, Form, Switch } from 'antd';
+import { DatePicker, Input, TimePicker, Button, Form, Switch } from 'antd';
 import { browserHistory } from 'react-router';
 import PosterCreator from '../PosterCreator';
 import UserPicker from './UserPicker';

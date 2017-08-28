@@ -1,7 +1,23 @@
 import { PureComponent } from 'react';
+import autobind from 'autobind-decorator';
 
+@autobind
 export default class QueryEventListing extends PureComponent {
   componentDidMount() {
+    this.getListing();
+
+    if (this.props.repeatEvery) {
+      this.queryInterval = setInterval(()=>this.getListing(), this.props.repeatEvery);
+    }
+  }
+
+  componentWillUnmount(){
+    if(this.queryInterval){
+      clearInterval(this.queryInterval);
+    }
+  }
+
+  getListing() {
     fetch('http://localhost:3333/events/list')
     .then(res => res.json())
     .then(listing => {
