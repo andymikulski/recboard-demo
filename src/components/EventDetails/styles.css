@@ -1,0 +1,25 @@
+.hosted-by {
+  display: flex;
+  align-items: center;
+
+  label {
+    margin-left: 0.5em;
+  }
+}
+
+.ant-row {
+  font-size: 14px;
+}
+
+.ant-form-item-label label {
+  font-weight: bold;
+  font-size: 1.15em;
+}
+
+.alert-bar {
+  margin: 1em auto;
+}
+
+.ant-form-item-control {
+  line-height: 1.5em;
+}

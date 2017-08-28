@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import QueryEventDetails from './QueryEventDetails';
 import autobind from 'autobind-decorator';
 import EventPoster from '../EventBoard/EventPoster';
+import DetailContents from './DetailContents';
 import { browserHistory } from 'react-router';
 import './styles.css';
 
@@ -25,10 +26,14 @@ export default class EventDetails extends Component {
   }
 
   handleFailedLoad() {
-    message.error('Sorry, something went wrong. Try again later.');
+    message.error('Sorry, something went wrong loading this event. Try again later.');
   }
 
   render() {
+    const {
+      details,
+    } = this.state;
+
     return (
       <div className="event-details">
         <QueryEventDetails
@@ -36,10 +41,8 @@ export default class EventDetails extends Component {
           onLoad={this.handleEventLoad}
           onFailedLoad={this.handleFailedLoad}
         />
-        { this.state.details &&
-          <div>
-            <EventPoster poster={this.state.details.eventPoster} />
-          </div>
+        { details &&
+          <DetailContents details={{ ...details }} />
         }
       </div>
     );

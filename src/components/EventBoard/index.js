@@ -61,11 +61,13 @@ export default class EventBoard extends Component {
   }];
 
   static TimeUntilCol = {
-    title: 'Time Until',
+    title: 'Starts In',
     key: 'time-until',
     render: (item) => {
       const start = moment(item.startDateTime);
-      return (<span>{ start.fromNow() }</span>);
+      const timeUntil = start.fromNow(true);
+      const titleCase = timeUntil[0].toUpperCase() + timeUntil.substring(1);
+      return titleCase;
     },
   }
 

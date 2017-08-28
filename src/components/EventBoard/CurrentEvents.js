@@ -20,7 +20,7 @@ export default class CurrentEvents extends Component {
 
     return (
       <div className="current-event-board">
-        <h1>Events Happening Now</h1>
+        <h1>Happening Now</h1>
         <div className="current-list">
           {
             list.map((event)=>{

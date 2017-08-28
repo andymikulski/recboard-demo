@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import React, { Component } from 'react';
-import { DatePicker, Tooltip, Input, TimePicker, Button, Form, Switch } from 'antd';
+import { DatePicker, Select, Tooltip, Input, TimePicker, Button, Form, Switch } from 'antd';
 import { browserHistory } from 'react-router';
 import PosterCreator from '../PosterCreator';
 import UserPicker from './UserPicker';
@@ -132,6 +132,28 @@ class CreateEvent extends Component {
               })(<TimePicker placeholder="End Time" size="large" use12Hours format="h:mm a" />)}
             </InputGroup>
           </span>
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Event Location"
+        >
+          {getFieldDecorator('eventLocation', {
+            rules: [
+              { required: false, message: 'Please enter an event name.' },
+            ],
+          })(
+            <Select
+              mode="combobox"
+              size="large"
+              placeholder="ex: Lobby #recroom"
+            >
+              <Select.Option key="Rec Center">Rec Center</Select.Option>
+              <Select.Option key="Quest Entrances">Quest Entrances</Select.Option>
+              <Select.Option key="Basketball Court">Basketball Court</Select.Option>
+              <Select.Option key="The Lounge">The Lounge</Select.Option>
+            </Select>
+          )}
         </FormItem>
 
         <FormItem

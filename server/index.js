@@ -54,10 +54,13 @@ app.get('/events/list', (req, res)=>{
       const alreadyHappened = now.isAfter(moment(item.endDateTime));
 
       if (hasntHappenedYet) {
+        item.isUpcoming = true;
         upcoming.push(item);
       } else if (isHappeningNow) {
+        item.isCurrent = true;
         current.push(item);
       } else if (alreadyHappened) {
+        item.isPast = true;
         past.push(item);
       }
     });
