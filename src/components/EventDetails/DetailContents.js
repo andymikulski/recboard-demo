@@ -42,6 +42,15 @@ export default class DetailContents extends Component {
               />
           }
           {
+            details.isPast &&
+              <Alert
+                message="Event Over!"
+                description="This event has already happened."
+                type="error"
+                showIcon
+              />
+          }
+          {
             details.eventPrivate &&
               <Alert
                 message="Private Event"
