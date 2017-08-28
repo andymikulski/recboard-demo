@@ -299,7 +299,7 @@ export default class PosterCreator extends Component {
     // Determine how big we are compared to full size.
     const currentWidth = Math.min(PosterCreator.MAX_WIDTH, parseFloat(getComputedStyle(this.canvasElement).width.replace('px', '')));
     const factor = currentWidth / PosterCreator.MAX_WIDTH;
-    console.log('factor', factor);
+
     saved.objects = saved.objects.map((obj)=>{
       return scaleObject(obj, factor);
     });
@@ -326,6 +326,8 @@ export default class PosterCreator extends Component {
         canvas.removeAttribute('width');
       });
       this.artboard.renderAll();
+
+      this.onWindowResize(el);
     }, 10);
 
     this.resizeHandler = window.addEventListener('resize', ()=>this.onWindowResize(el));
@@ -391,6 +393,7 @@ export default class PosterCreator extends Component {
     // localStorage.setItem('poster-size', baseWidth);
 
     if (this.props.onChange){
+      // need to patch background color into the save
       this.props.onChange([this.artboard.toObject(), this.artboard.toSVG()]);
     }
   }
