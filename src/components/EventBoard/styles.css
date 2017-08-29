@@ -38,7 +38,13 @@
 
 .event-poster {
   pointer-events: none;
+
+  .ant-table-tbody & {
+    width: 150px;
+    max-width: 100%;
+  }
 }
+
 
 .date-col,
 .hosts-col {
